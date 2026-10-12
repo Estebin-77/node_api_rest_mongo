@@ -1,0 +1,136 @@
+{
+  "info": {
+    "name": "API de libros — entrevista",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "book_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Listar libros",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/books"
+      }
+    },
+    {
+      "name": "Crear libro de prueba",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "url": "{{base_url}}/books",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Libro de entrevista\",\n  \"author\": \"Autor de prueba\",\n  \"genre\": \"Demo\",\n  \"publication_date\": \"2020-01-01\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Creación correcta', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('book_id', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultar libro creado",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/books/{{book_id}}"
+      }
+    },
+    {
+      "name": "Modificar título",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "url": "{{base_url}}/books/{{book_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Título actualizado\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Reemplazar libro",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "url": "{{base_url}}/books/{{book_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Libro reemplazado\",\n  \"author\": \"Otro autor\",\n  \"genre\": \"Demo\",\n  \"publication_date\": \"2021-01-01\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Eliminar libro de prueba",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "url": "{{base_url}}/books/{{book_id}}"
+      }
+    }
+  ]
+}
