@@ -13,4 +13,4 @@ async function seed() {
     console.log('Catálogo de muestra preparado; las entradas existentes se conservan.');
   } finally { await mongoose.disconnect(); }
 }
-seed().catch(error => { console.error('No se pudo cargar el catálogo:', error.name); process.exitCode = 1; });
+seed().catch(error => { console.error('No se pudo cargar el catálogo:', error.name, 'código:', error.code || 'sin código'); process.exitCode = 1; });
