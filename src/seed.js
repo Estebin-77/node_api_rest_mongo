@@ -1,9 +1,10 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Book = require('./models/book.model');
+const { mongoUri } = require('./mongo-config');
 async function seed() {
   if (!process.env.MONGO_URL) throw new Error('Falta MONGO_URL');
-  await mongoose.connect(process.env.MONGO_URL, { dbName: process.env.MONGO_DB_NAME || 'books', serverSelectionTimeoutMS: 5000 });
+  await mongoose.connect(mongoUri(), { dbName: process.env.MONGO_DB_NAME || 'books', serverSelectionTimeoutMS: 5000 });
   try {
     for (const book of [
       { title: 'Don Quijote de la Mancha', author: 'Miguel de Cervantes', genre: 'Novela', publication_date: '1605-01-01' },

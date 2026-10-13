@@ -5,9 +5,18 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const request = require('supertest');
 const { createApp } = require('../src/app');
 const Book = require('../src/models/book.model');
+const { mongoUri } = require('../src/mongo-config');
 const app = createApp({ apiKey: 'test-only-key' });
 const sample = { title: 'Libro de prueba', author: 'Autor', genre: 'Novela', publication_date: '2020-02-29' };
 let mongo;
+test('el controlador interpreta correctamente contraseñas con caracteres especiales', () => {
+  const password = 'demo@:/?#%+ palabra';
+  const uri = mongoUri('mongodb://usuario@localhost:27017/books?authSource=admin', password);
+  const client = new mongoose.mongo.MongoClient(uri);
+  assert.equal(client.options.credentials.password, password);
+  assert.equal(client.options.credentials.username, 'usuario');
+  assert.equal(client.options.credentials.source, 'admin');
+});
 before(async () => { mongo = await MongoMemoryServer.create(); await mongoose.connect(mongo.getUri()); });
 after(async () => { await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => { await Book.deleteMany({}); });
@@ -48,3 +57,4 @@ test('health refleja la conexión y la portada no contiene la clave', async () =
   assert.equal((await request(app).get('/health')).status, 200);
   const home = await request(app).get('/'); assert.equal(home.status, 200); assert.ok(!home.text.includes('test-only-key'));
 });
+

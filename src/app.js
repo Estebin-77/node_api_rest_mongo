@@ -4,6 +4,7 @@ const crypto = require('node:crypto');
 const path = require('node:path');
 require('dotenv').config();
 const bookRoutes = require('./routes/book.routes');
+const { mongoUri } = require('./mongo-config');
 
 function createApp({ apiKey = process.env.API_KEY } = {}) {
   const app = express();
@@ -34,7 +35,7 @@ function createApp({ apiKey = process.env.API_KEY } = {}) {
 }
 async function start() {
   if (!process.env.MONGO_URL) throw new Error('Falta MONGO_URL');
-  await mongoose.connect(process.env.MONGO_URL, { dbName: process.env.MONGO_DB_NAME || 'books', serverSelectionTimeoutMS: 5000 });
+  await mongoose.connect(mongoUri(), { dbName: process.env.MONGO_DB_NAME || 'books', serverSelectionTimeoutMS: 5000 });
   const server = createApp().listen(process.env.PORT || 3000, '0.0.0.0', () => console.log('API de libros disponible.'));
   const shutdown = () => server.close(async () => { await mongoose.disconnect(); process.exit(0); });
   process.on('SIGTERM', shutdown); process.on('SIGINT', shutdown);

@@ -41,3 +41,5 @@ Plan gratuito, build `npm ci`, inicio `npm start`, health `/health`. Configura `
 ## Para explicar en una entrevista
 
 Express recibe la petición y ejecuta los middleware; las rutas validan los datos; Mongoose consulta o guarda documentos en MongoDB; el servidor devuelve JSON. La portada usa fetch para mostrar el catálogo. PUT requiere todos los campos, mientras PATCH admite cambios parciales. No utiliza React ni TypeScript.
+
+Puedes configurar MONGODB_PASSWORD como variable separada en Render. El servidor codifica sus caracteres especiales y la utiliza en lugar de la contraseña incluida en MONGO_URL.
